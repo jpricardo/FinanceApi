@@ -1,0 +1,33 @@
+@FinanceApi_HostAddress = https://localhost:7054
+
+GET {{FinanceApi_HostAddress}}/expense
+
+###
+
+@id=0
+GET {{FinanceApi_HostAddress}}/expense/{{id}}
+
+###
+
+
+PUT {{FinanceApi_HostAddress}}/expense/{{id}}
+Content-Type: application/json
+
+{
+  //Expense
+}
+
+###
+
+DELETE {{FinanceApi_HostAddress}}/expense/{{id}}
+
+###
+
+POST {{FinanceApi_HostAddress}}/expense
+Content-Type: application/json
+
+{
+  "description": "teste"
+}
+
+###
