@@ -1,6 +1,8 @@
-using FinanceApi.Data.Enum;
-using FinanceApi.Mappers;
-using FinanceApi.Models;
+using FinanceApi.Data;
+using FinanceApi.Models.DTOs.Income;
+using FinanceApi.Models.Entities;
+using FinanceApi.Models.Enums;
+using FinanceApi.Models.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

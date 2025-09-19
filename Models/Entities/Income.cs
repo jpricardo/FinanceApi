@@ -1,8 +1,8 @@
-using FinanceApi.Data.Enum;
+using FinanceApi.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FinanceApi.Models
+namespace FinanceApi.Models.Entities
 {
     public class Income
     {

@@ -1,6 +1,7 @@
-﻿using FinanceApi.Models;
+﻿using FinanceApi.Models.DTOs.Expense;
+using FinanceApi.Models.Entities;
 
-namespace FinanceApi.Mappers
+namespace FinanceApi.Models.Mappers
 {
     public static class ExpenseMapper
     {

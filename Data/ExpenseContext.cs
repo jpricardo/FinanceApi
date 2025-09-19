@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FinanceApi.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 
-namespace FinanceApi.Models
+namespace FinanceApi.Data
 {
     public class ExpenseContext(DbContextOptions<ExpenseContext> options) : DbContext(options)
     {

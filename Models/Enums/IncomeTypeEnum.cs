@@ -1,4 +1,4 @@
-﻿namespace FinanceApi.Data.Enum
+﻿namespace FinanceApi.Models.Enums
 {
     public enum IncomeTypeEnum
     {

@@ -1,5 +1,6 @@
-using FinanceApi.Data.Enum;
-using FinanceApi.Models;
+using FinanceApi.Data;
+using FinanceApi.Models.Entities;
+using FinanceApi.Models.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;

@@ -1,6 +1,6 @@
-using FinanceApi.Data.Enum;
+using FinanceApi.Models.Enums;
 
-namespace FinanceApi.Models
+namespace FinanceApi.Models.DTOs.Income
 {
     public class CreateIncomeDTO
     {

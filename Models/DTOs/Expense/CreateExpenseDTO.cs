@@ -1,7 +1,7 @@
-﻿using FinanceApi.Data.Enum;
+﻿using FinanceApi.Models.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace FinanceApi.Models
+namespace FinanceApi.Models.DTOs.Expense
 {
     public class CreateExpenseDTO
     {
