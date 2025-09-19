@@ -1,4 +1,5 @@
-﻿using FinanceApi.Mappers;
+﻿using FinanceApi.Data.Enum;
+using FinanceApi.Mappers;
 using FinanceApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +13,43 @@ namespace FinanceApi.Controllers
         private readonly ExpenseContext _context = context;
 
         [HttpGet("", Name = "GetAllExpenses")]
-        public async Task<ActionResult<IEnumerable<GetExpenseDTO>>> GetAll()
+        public async Task<ActionResult<IEnumerable<GetExpenseDTO>>> GetAll(
+            [FromQuery] ExpenseTypeEnum? type,
+            [FromQuery] DateOnly? startDate,
+            [FromQuery] DateOnly? endDate,
+            [FromQuery] decimal? minAmmount,
+            [FromQuery] decimal? maxAmmount)
         {
-            List<GetExpenseDTO> expenses = await _context.Expenses.Select(e => ExpenseMapper.MapToGetExpenseDTO(e)).ToListAsync();
+            IQueryable<Expense> query = _context.Expenses;
+
+            // Filter by type
+            if (type.HasValue)
+            {
+                query = query.Where(e => e.ExpenseType == type.Value);
+            }
+
+            // Filter by date
+            if (startDate.HasValue)
+            {
+                query = query.Where(e => e.Date >= startDate);
+            }
+            if (endDate.HasValue)
+            {
+                query = query.Where(e => e.Date <= endDate);
+            }
+
+            // Filter by ammount
+            if (minAmmount.HasValue)
+            {
+                query = query.Where(e => e.Ammount >= minAmmount);
+            }
+            if (maxAmmount.HasValue)
+            {
+                query = query.Where(e => e.Ammount <= maxAmmount);
+            }
+
+            List<GetExpenseDTO> expenses = await query.Select(e => ExpenseMapper.MapToGetExpenseDTO(e)).ToListAsync();
+
             return expenses;
         }
 
