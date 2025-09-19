@@ -1,4 +1,5 @@
-﻿using FinanceApi.Models;
+﻿using FinanceApi.Mappers;
+using FinanceApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,19 +11,15 @@ namespace FinanceApi.Controllers
     {
         private readonly ExpenseContext _context = context;
 
-        private bool ExpenseExists(long id)
-        {
-            return _context.Expenses.Any(e => e.Id == id);
-        }
-
         [HttpGet("", Name = "GetAllExpenses")]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetAll()
+        public async Task<ActionResult<IEnumerable<GetExpenseDTO>>> GetAll()
         {
-            return await _context.Expenses.ToListAsync();
+            List<GetExpenseDTO> expenses = await _context.Expenses.Select(e => ExpenseMapper.MapToGetExpenseDTO(e)).ToListAsync();
+            return expenses;
         }
 
         [HttpGet("{id}", Name = "GetExpense")]
-        public async Task<ActionResult<Expense>> Get(long id)
+        public async Task<ActionResult<GetExpenseDTO>> Get(long id)
         {
             Expense? item = await _context.Expenses.FindAsync(id);
 
@@ -31,16 +28,13 @@ namespace FinanceApi.Controllers
                 return NotFound();
             }
 
-            return item;
+            return ExpenseMapper.MapToGetExpenseDTO(item);
         }
 
         [HttpPost("", Name = "CreateExpense")]
         public async Task<ActionResult<Expense>> Post(CreateExpenseDTO createExpenseDTO)
         {
-            Expense expense = new Expense
-            {
-                Description = createExpenseDTO.Description
-            };
+            Expense expense = ExpenseMapper.MapToExpense(createExpenseDTO);
 
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
@@ -56,29 +50,15 @@ namespace FinanceApi.Controllers
                 return BadRequest();
             }
 
-            Expense expense = new Expense
-            {
-                Id = updateExpenseDTO.Id,
-                Description = updateExpenseDTO.Description
-            };
+            Expense? existingExpense = await _context.Expenses.FindAsync(updateExpenseDTO.Id);
 
-            _context.Entry(expense).State = EntityState.Modified;
+            if (existingExpense == null)
+            {
+                return NotFound();
+            }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!this.ExpenseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            ExpenseMapper.MapToExpense(updateExpenseDTO, existingExpense);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
