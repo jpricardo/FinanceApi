@@ -12,7 +12,7 @@ namespace FinanceApi.Models
         [Required]
         public string Description { get; set; } = "";
         public ExpenseTypeEnum ExpenseType { get; set; }
-        public decimal Ammount { get; set; }
+        public decimal Amount { get; set; }
         public CurrencyEnum Currency { get; set; }
         public DateOnly Date { get; set; }
         public DateTime CreatedAt { get; set; }

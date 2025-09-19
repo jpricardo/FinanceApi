@@ -19,8 +19,8 @@ namespace FinanceApi.Controllers
             [FromQuery] ExpenseTypeEnum? type,
             [FromQuery] DateOnly? startDate,
             [FromQuery] DateOnly? endDate,
-            [FromQuery] decimal? minAmmount,
-            [FromQuery] decimal? maxAmmount)
+            [FromQuery] decimal? minAmount,
+            [FromQuery] decimal? maxAmount)
         {
             IQueryable<Expense> query = _expenseContext.Expenses;
 
@@ -38,19 +38,19 @@ namespace FinanceApi.Controllers
                 query = query.Where(e => e.Date <= endDate);
             }
 
-            if (minAmmount.HasValue)
+            if (minAmount.HasValue)
             {
-                query = query.Where(e => e.Ammount >= minAmmount);
+                query = query.Where(e => e.Amount >= minAmount);
             }
-            if (maxAmmount.HasValue)
+            if (maxAmount.HasValue)
             {
-                query = query.Where(e => e.Ammount <= maxAmmount);
+                query = query.Where(e => e.Amount <= maxAmount);
             }
 
             var expenses = await query.ToListAsync();
 
             var csv = new StringBuilder();
-            csv.AppendLine("Id,Description,ExpenseType,Ammount,Currency,Date,CreatedAt,UpdatedAt");
+            csv.AppendLine("Id,Description,ExpenseType,Amount,Currency,Date,CreatedAt,UpdatedAt");
 
             foreach (Expense e in expenses)
             {
@@ -58,7 +58,7 @@ namespace FinanceApi.Controllers
                     e.Id,
                     EscapeCsv(e.Description),
                     e.ExpenseType,
-                    e.Ammount.ToString(CultureInfo.InvariantCulture),
+                    e.Amount.ToString(CultureInfo.InvariantCulture),
                     e.Currency,
                     e.Date.ToString("yyyy-MM-dd"),
                     e.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),

@@ -17,8 +17,8 @@ namespace FinanceApi.Controllers
             [FromQuery] ExpenseTypeEnum? type,
             [FromQuery] DateOnly? startDate,
             [FromQuery] DateOnly? endDate,
-            [FromQuery] decimal? minAmmount,
-            [FromQuery] decimal? maxAmmount)
+            [FromQuery] decimal? minAmount,
+            [FromQuery] decimal? maxAmount)
         {
             IQueryable<Expense> query = _context.Expenses;
 
@@ -38,14 +38,15 @@ namespace FinanceApi.Controllers
                 query = query.Where(e => e.Date <= endDate);
             }
 
-            // Filter by ammount
-            if (minAmmount.HasValue)
+            // Filter by
+            // 
+            if (minAmount.HasValue)
             {
-                query = query.Where(e => e.Ammount >= minAmmount);
+                query = query.Where(e => e.Amount >= minAmount);
             }
-            if (maxAmmount.HasValue)
+            if (maxAmount.HasValue)
             {
-                query = query.Where(e => e.Ammount <= maxAmmount);
+                query = query.Where(e => e.Amount <= maxAmount);
             }
 
             List<GetExpenseDTO> expenses = await query.Select(e => ExpenseMapper.MapToGetExpenseDTO(e)).ToListAsync();

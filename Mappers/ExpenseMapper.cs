@@ -11,7 +11,7 @@ namespace FinanceApi.Mappers
                 Id = expense.Id,
                 Description = expense.Description,
                 ExpenseType = expense.ExpenseType,
-                Ammount = expense.Ammount,
+                Amount = expense.Amount,
                 Currency = expense.Currency,
                 Date = expense.Date,
                 CreatedAt = expense.CreatedAt,
@@ -24,7 +24,7 @@ namespace FinanceApi.Mappers
 
             expense.Description = dto.Description;
             expense.ExpenseType = dto.ExpenseType;
-            expense.Ammount = dto.Ammount;
+            expense.Amount = dto.Amount;
             expense.Currency = dto.Currency;
             expense.Date = dto.Date;
 
@@ -40,7 +40,7 @@ namespace FinanceApi.Mappers
             {
                 Description = dto.Description,
                 ExpenseType = dto.ExpenseType,
-                Ammount = dto.Ammount,
+                Amount = dto.Amount,
                 Currency = dto.Currency,
                 Date = dto.Date,
 

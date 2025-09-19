@@ -38,7 +38,7 @@ namespace FinanceApi.Controllers
                 query = query.Where(e => e.Date <= endDate);
             }
 
-            // Filter by ammount
+            // Filter by amount
             if (minAmount.HasValue)
             {
                 query = query.Where(e => e.Amount >= minAmount);
