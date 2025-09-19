@@ -1,0 +1,79 @@
+using FinanceApi.Data.Enum;
+using FinanceApi.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Text;
+
+namespace FinanceApi.Controllers
+{
+    [ApiController]
+    [Route("[controller]")]
+    public class ReportsController(ExpenseContext context) : ControllerBase
+    {
+        private readonly ExpenseContext _context = context;
+
+        [HttpGet("expenses/csv")]
+        public async Task<IActionResult> ExportExpensesToCsv(
+            [FromQuery] ExpenseTypeEnum? type,
+            [FromQuery] DateOnly? startDate,
+            [FromQuery] DateOnly? endDate,
+            [FromQuery] decimal? minAmmount,
+            [FromQuery] decimal? maxAmmount)
+        {
+            IQueryable<Expense> query = _context.Expenses;
+
+            if (type.HasValue)
+            {
+                query = query.Where(e => e.ExpenseType == type.Value);
+            }
+
+            if (startDate.HasValue)
+            {
+                query = query.Where(e => e.Date >= startDate);
+            }
+            if (endDate.HasValue)
+            {
+                query = query.Where(e => e.Date <= endDate);
+            }
+
+            if (minAmmount.HasValue)
+            {
+                query = query.Where(e => e.Ammount >= minAmmount);
+            }
+            if (maxAmmount.HasValue)
+            {
+                query = query.Where(e => e.Ammount <= maxAmmount);
+            }
+
+            var expenses = await query.ToListAsync();
+
+            var csv = new StringBuilder();
+            csv.AppendLine("Id,Description,ExpenseType,Ammount,Currency,Date,CreatedAt,UpdatedAt");
+
+            foreach (Expense e in expenses)
+            {
+                csv.AppendLine(string.Join(",",
+                    e.Id,
+                    EscapeCsv(e.Description),
+                    e.ExpenseType,
+                    e.Ammount.ToString(CultureInfo.InvariantCulture),
+                    e.Currency,
+                    e.Date.ToString("yyyy-MM-dd"),
+                    e.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss"),
+                    e.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")
+                ));
+            }
+
+            var bytes = Encoding.UTF8.GetBytes(csv.ToString());
+            return File(bytes, "text/csv", "expenses.csv");
+        }
+
+        private static string EscapeCsv(string value)
+        {
+            if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            return value;
+        }
+    }
+}
