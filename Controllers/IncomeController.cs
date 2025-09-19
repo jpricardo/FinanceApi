@@ -3,11 +3,13 @@ using FinanceApi.Models.DTOs.Income;
 using FinanceApi.Models.Entities;
 using FinanceApi.Models.Enums;
 using FinanceApi.Models.Mappers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinanceApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class IncomeController(IncomeContext context) : ControllerBase

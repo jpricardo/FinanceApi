@@ -1,6 +1,7 @@
 using FinanceApi.Data;
 using FinanceApi.Models.Entities;
 using FinanceApi.Models.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -8,6 +9,7 @@ using System.Text;
 
 namespace FinanceApi.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class ReportsController(ExpenseContext expenseContext, IncomeContext incomeContext) : ControllerBase
